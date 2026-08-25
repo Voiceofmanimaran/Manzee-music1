@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Manzee Music, a focused music library and player." />
+  <title>Manzee Music</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#library" aria-label="Manzee Music home">
+        <span class="brand-mark">M</span>
+        <span>manzee<span class="brand-dot">.</span></span>
+      </a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <a class="nav-item active" href="#library"><span class="nav-icon">⌂</span> Library</a>
+        <a class="nav-item" href="#admin"><span class="nav-icon">＋</span> Add song</a>
+      </nav>
+      <div class="sidebar-note">
+        <span class="eyebrow">Your space</span>
+        <p>A simple home for songs worth replaying.</p>
+      </div>
+      <div class="sidebar-footer">MANZEE MUSIC / 2026</div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span class="status-dot"></span> Live library <span class="slash">/</span> <span id="song-count">0 tracks</span></div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="refresh-button" title="Refresh library" aria-label="Refresh library">↻</button>
+          <a class="avatar" href="#admin" title="Open admin panel">MM</a>
+        </div>
+      </header>
+
+      <section class="hero" id="library">
+        <div class="hero-copy">
+          <span class="eyebrow">Curated for the moment</span>
+          <h1>Press play.<br /><em>Stay awhile.</em></h1>
+          <p>Find the sounds that meet you where you are.</p>
+        </div>
+        <div class="hero-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </section>
+
+      <section class="library-section">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">The collection</span>
+            <h2>All songs</h2>
+          </div>
+          <label class="search-box"><span>⌕</span><input id="search-input" type="search" placeholder="Search songs, artists..." /></label>
+        </div>
+        <div id="notice" class="notice" role="status" hidden></div>
+        <div class="song-table-wrap">
+          <div class="song-table-head"><span>#</span><span>Title</span><span>Album</span><span>Length</span><span></span></div>
+          <div id="song-list" class="song-list" aria-live="polite"></div>
+        </div>
+        <div id="empty-state" class="empty-state" hidden><strong>No songs here yet.</strong><span>Add a track from the admin panel to start your library.</span><a href="#admin" class="text-link">Add your first song →</a></div>
+      </section>
+
+      <section class="admin-section" id="admin">
+        <div class="section-heading admin-heading"><div><span class="eyebrow">Library management</span><h2 id="form-heading">Add a song</h2></div><span class="admin-lock">ADMIN PANEL</span></div>
+        <form id="song-form" class="song-form">
+          <input type="hidden" id="song-id" />
+          <label>Song title<input id="title" required maxlength="120" placeholder="e.g. Let Me Go" /></label>
+          <label>Artist<input id="artist" required maxlength="120" placeholder="e.g. Jay Jen" /></label>
+          <label>Album<input id="album" maxlength="120" placeholder="e.g. After Hours" /></label>
+          <label>Cover image URL<input id="cover-url" type="url" placeholder="https://..." /></label>
+          <label class="wide">Cloudinary audio URL<input id="audio-url" type="url" required placeholder="https://res.cloudinary.com/...mp3" /></label>
+          <div class="form-actions"><button class="button secondary" type="button" id="cancel-edit" hidden>Cancel</button><button class="button primary" type="submit" id="submit-song">Save song <span>→</span></button></div>
+        </form>
+        <div id="admin-list" class="admin-list"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="player" id="player">
+    <div class="now-playing"><div class="now-cover" id="now-cover"><span>♪</span></div><div class="now-meta"><strong id="now-title">Nothing playing</strong><span id="now-artist">Choose a track from your library</span></div></div>
+    <div class="player-main"><div class="player-controls"><button class="player-button" id="previous-button" title="Previous" aria-label="Previous track">|◀</button><button class="play-button" id="play-button" title="Play" aria-label="Play">▶</button><button class="player-button" id="next-button" title="Next" aria-label="Next track">▶|</button></div><div class="progress-row"><span id="current-time">0:00</span><input id="progress" type="range" min="0" max="100" value="0" aria-label="Track progress" /><span id="duration">0:00</span></div></div>
+    <div class="volume-control"><span>◖</span><input id="volume" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume" /></div>
+    <audio id="audio"></audio>
+  </footer>
+</body>
+</html>
